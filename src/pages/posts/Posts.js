@@ -17,6 +17,13 @@ function Posts() {
     loadPosts()
   }, []);
 
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure to delete this post?')) {
+      await client.delete(`/posts/${id}`)
+      loadPosts()
+    }
+  }
+
   if (loading) {
     return (
       <div className="ui text active loader">Loading</div>
@@ -41,7 +48,17 @@ function Posts() {
             <tr key={post._id}>
               <td data-label="Title">{post.title}</td>
               <td data-label="Created At">{post.createdAt}</td>
-              <td data-label="Actions"></td>
+              <td data-label="Actions">
+                <Link to={`/posts/${post._id}`}>
+                  <button className="ui primary basic button">Edit</button>
+                </Link>
+                <button
+                  className="ui negative basic button"
+                  onClick={() => handleDelete(post._id)}
+                >
+                    Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
